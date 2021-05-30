@@ -64,7 +64,7 @@ def put(env, start_response, todo_id):
         todo.update()
 
         start_response('200 OK', [('Content-type', 'application/json; charset=utf-8')])
-        return []
+        return [b'{}']
     except (json.JSONDecodeError, ValidationError):
         raise BadRequest
     except TodoNotFound:
@@ -76,6 +76,6 @@ def delete(env, start_response, todo_id):
         Todo.get(int(todo_id)).delete()
 
         start_response('200 OK', [('Content-type', 'application/json; charset=utf-8')])
-        return []
+        return [b'{}']
     except TodoNotFound:
         raise NotFound
