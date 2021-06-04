@@ -36,8 +36,8 @@ def post(env, start_response):
 
         todo_id = Todo(todo_dict['content']).insert()
 
-        start_response('200 OK', [('Content-type', 'application/json; charset=utf-8')])
-        return [str(todo_id).encode('utf-8')]
+        start_response('201 Created', [('Location', f'/todo/{todo_id}/')])
+        return []
     except (json.JSONDecodeError, ValidationError):
         raise BadRequest
 
@@ -63,8 +63,8 @@ def put(env, start_response, todo_id):
         todo.content = todo_dict['content']
         todo.update()
 
-        start_response('200 OK', [('Content-type', 'application/json; charset=utf-8')])
-        return [b'{}']
+        start_response('204 No Content', [])
+        return []
     except (json.JSONDecodeError, ValidationError):
         raise BadRequest
     except TodoNotFound:
@@ -75,7 +75,7 @@ def delete(env, start_response, todo_id):
     try:
         Todo.get(int(todo_id)).delete()
 
-        start_response('200 OK', [('Content-type', 'application/json; charset=utf-8')])
-        return [b'{}']
+        start_response('204 No Content', [])
+        return []
     except TodoNotFound:
         raise NotFound
